@@ -112,7 +112,7 @@ client.on('message', async msg => {
             }
             let embed = new Discord.MessageEmbed()
                 .setTitle('Sharkbyte ARAK Help')
-                .setColor(0xff0000)
+                .setColor(0x0033cc)
                 .setAuthor(client.user.tag, client.user.avatarURL())
                 .setDescription(things.help[cc].desc)
                 .setFooter("\xa9 Sharkbyteprojects");
@@ -188,24 +188,26 @@ client.on('message', async msg => {
             }
             // Only try to join the sender's voice channel if they are in one themselves
             if (msg.member.voice.channel) {
+                const inx = userplayer.findIndex((cit) => cit.master == msg.author.id);
+                if (inx >= 0) {
+                    const channel = userplayer[inx].c
+                    const dis = userplayer[inx].dis;
+                    userplayer.splice(inx, 1);
+                    try {
+                        if (channel) {
+                            var fcu = "";
+                            if (dis) {
+                                dis.destroy();
+                                fcu = "Music Cleanup Suceed!\n";
+                            }
+                            channel.leave();
+                        } else { console.warn(`${things.sstne}*`); }
+                    } catch (e) { console.warn(things.sstne); }
+                }
                 if (splcon.length >= 2) {
                     if (/((http|https):\/\/)?(www\.)?(youtube\.com)(\/)?([a-zA-Z0-9\-\.]+)\/?/.test(splcon[1])) {
                         const connection = await msg.member.voice.channel.join();
                         try {
-                            const inx = userplayer.findIndex((cit) => cit.master == msg.author.id);
-                            if (inx >= 0) {
-                                const channel = userplayer[inx].c
-                                const dis = userplayer[inx].dis;
-                                userplayer.splice(inx, 1);
-                                try {
-                                    if (dis) {
-                                        dis.destroy();
-                                    }
-                                    if (channel) {
-                                        channel.leave();
-                                    } else { console.warn(`${things.sstne}*`); }
-                                } catch (e) { console.warn(things.sstne); }
-                            }
                             const dispatcher = connection.play(ytdl(splcon[1], { filter: 'audioonly' }));
                             const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id }) - 1;
                             dispatcher.on("start", async () => {
