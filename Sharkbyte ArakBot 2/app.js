@@ -188,16 +188,12 @@ client.on('message', async msg => {
             }
             const inx = userplayer.findIndex((cit) => cit.master == msg.author.id);
             if (inx >= 0) {
-                const channelxr = userplayer[inx].c
                 const dis = userplayer[inx].dis;
                 userplayer.splice(inx, 1);
                 try {
                     if (dis) {
                         (await dis.destroy());
                     }
-                    if (channelxr) {
-                        (await channelxr.leave());
-                    } else { console.warn(`${things.sstne}*`); }
                 } catch (e) { console.warn(things.sstne); }
             }
             // Only try to join the sender's voice channel if they are in one themselves
