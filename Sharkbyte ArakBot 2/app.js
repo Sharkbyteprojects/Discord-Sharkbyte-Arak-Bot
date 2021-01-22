@@ -1,4 +1,5 @@
 'use strict';
+console.log("Sharkbyte ARAK Discord Bot\n\xa9 Sharkbyteprojects");
 const botkey = require("./settings/usr.json").key;
 const status = ['available', 'idle', 'dnd', 'invisible'];
 const Discord = require('discord.js');
