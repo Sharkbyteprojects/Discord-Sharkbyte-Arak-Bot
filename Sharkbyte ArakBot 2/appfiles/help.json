@@ -1,0 +1,38 @@
+{
+  "help": {
+    "field": {
+      "-embed": "Create a embed from a json",
+      "-help": "Display this, second arg = help to an element (without `-`)",
+      "-admin": "Display the name of the admin",
+      "-usrlist": "Create a List from all users at the server",
+      "-whois": "Show Information about the mentioned user",
+      "-play": "Play a youtube music in Voice channel (Type `-help play` for more about this module)"
+    },
+    "desc": "How to use this AdminBot"
+  },
+  "embed": {
+    "field": {
+      "Example usage": "`-embed {\"title\":\"Hey\", \"description\": \"Some example description\", \"fields\": {\"Hello\": \"World\", \"Heading\": \"Content\"}}`",
+      "Show Possible JSON input": "-embed"
+    },
+    "desc": "Usage of this module"
+  },
+  "admin": {
+    "field": {},
+    "desc": "Display the name of the admin"
+  },
+  "usrlist": {
+    "field": {},
+    "desc": "Create a List from all users at the server"
+  },
+  "whois": {
+    "field": {
+      "Usage": "-whois @someone"
+    },
+    "desc": "Show Information about the Mentioned user"
+  },
+  "play": {
+    "desc": "Play a youtube music in the Voice channel you joined (join a voice channel first!) | :shark:",
+    "field": { "Usage": "`-play https://www.youtube.com/watch?v=HEfjxLcNNCI` will play the music `https://www.youtube.com/watch?v=HEfjxLcNNCI`" }
+  }
+}

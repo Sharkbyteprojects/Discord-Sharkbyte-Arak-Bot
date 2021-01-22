@@ -1,0 +1,32 @@
+[
+  {
+    "n": "title",
+    "desc": "title of the embed",
+    "dt": 0,
+    "ev": "title needed"
+  },
+  {
+    "n": "description",
+    "desc": "description of the embed",
+    "dt": 0,
+    "ev":  "No Description given"
+  },
+  {
+    "n": "image",
+    "desc": "The Uri to the Image",
+    "dt": 0,
+    "ev": ""
+  },
+  {
+    "n": "color",
+    "desc": "HexDecimal Color Value (Default `3366ff`)",
+    "dt": 0,
+    "ev": "3366ff"
+  },
+  {
+    "n": "fields",
+    "desc": "An array of fields like this: `{\"title\": \"desc\", \"Hello\": \"World\"}`",
+    "dt": 1,
+    "ev": [ ]
+  }
+]
