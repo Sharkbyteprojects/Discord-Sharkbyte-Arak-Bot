@@ -186,24 +186,22 @@ client.on('message', async msg => {
                 msg.reply(nmbed(`Failue, you running not on a GUILD`, ':warning: VoiceChannel').setThumbnail(things.headasset).setColor(0x66ff66));
                 return;
             }
+            const inx = userplayer.findIndex((cit) => cit.master == msg.author.id);
+            if (inx >= 0) {
+                const channelxr = userplayer[inx].c
+                const dis = userplayer[inx].dis;
+                userplayer.splice(inx, 1);
+                try {
+                    if (dis) {
+                        (await dis.destroy());
+                    }
+                    if (channelxr) {
+                        (await channelxr.leave());
+                    } else { console.warn(`${things.sstne}*`); }
+                } catch (e) { console.warn(things.sstne); }
+            }
             // Only try to join the sender's voice channel if they are in one themselves
             if (msg.member.voice.channel) {
-                const inx = userplayer.findIndex((cit) => cit.master == msg.author.id);
-                if (inx >= 0) {
-                    const channel = userplayer[inx].c
-                    const dis = userplayer[inx].dis;
-                    userplayer.splice(inx, 1);
-                    try {
-                        if (channel) {
-                            var fcu = "";
-                            if (dis) {
-                                dis.destroy();
-                                fcu = "Music Cleanup Suceed!\n";
-                            }
-                            channel.leave();
-                        } else { console.warn(`${things.sstne}*`); }
-                    } catch (e) { console.warn(things.sstne); }
-                }
                 if (splcon.length >= 2) {
                     if (/((http|https):\/\/)?(www\.)?(youtube\.com)(\/)?([a-zA-Z0-9\-\.]+)\/?/.test(splcon[1])) {
                         const connection = await msg.member.voice.channel.join();
@@ -211,13 +209,13 @@ client.on('message', async msg => {
                             const dispatcher = connection.play(ytdl(splcon[1], { filter: 'audioonly' }));
                             const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id }) - 1;
                             dispatcher.on("start", async () => {
-                                const msgs = await msg.reply(nmbed(`Start Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                                const msgs = (await msg.reply(nmbed(`Start Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
                                 setTimeout(() => {
                                     if (msgs.deletable) msgs.delete({ timeout: 5 });
                                 }, 10000);
                             });
                             dispatcher.on('finish', async () => {
-                                const msgs = await msg.reply(nmbed(`Finished Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                                const msgs = (await msg.reply(nmbed(`Finished Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
                                 setTimeout(() => {
                                     if (msgs.deletable) msgs.delete({ timeout: 5 });
                                 }, 10000);
@@ -225,14 +223,14 @@ client.on('message', async msg => {
                                 msg.member.voice.channel.leave();
                             });
                             dispatcher.on('error', async (xer) => {
-                                const msgs = await msg.reply(nmbed(`An error Occured`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                                const msgs = (await msg.reply(nmbed(`An error Occured`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
                                 setTimeout(() => {
                                     if (msgs.deletable) msgs.delete({ timeout: 5 });
                                 }, 10000);
                                 console.error(xer);
                             });
                         } catch (e) {
-                            const msgs = awaitmsg.reply(nmbed(`I think the Url doesn't work!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                            const msgs = await msg.reply(nmbed(`I think the Url doesn't work!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
                             setTimeout(() => {
                                 if (msgs.deletable) msgs.delete({ timeout: 5 });
                             }, 10000);
@@ -267,10 +265,10 @@ client.on('message', async msg => {
                     if (channel) {
                         var fcu = "";
                         if (dis) {
-                            dis.destroy();
+                            await dis.destroy();;
                             fcu = "Music Cleanup Suceed!\n";
                         }
-                        channel.leave();
+                        await channel.leave();;
                         const msgs = await msg.reply(nmbed(`${fcu}Suceedfully Cleanup`, ':white_check_mark:  VoiceChannel').setThumbnail(things.headasset));
                         setTimeout(() => {
                             if (msgs.deletable) msgs.delete({ timeout: 5 });
