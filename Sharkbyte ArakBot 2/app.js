@@ -8,7 +8,7 @@ const { botkey, tolog } = require("./settings/usr.json"),
     client = new Discord.Client(),
     fs = require("./appfiles/ftool"),
     tr = require("./appfiles/trcatch"),
-    ytdl = require('ytdl-core'),
+    ytdl = require('ytdl-core');/*,
     stop = async () => {
         try {
             await client.user.setStatus(status[2]);
@@ -17,7 +17,7 @@ const { botkey, tolog } = require("./settings/usr.json"),
         }
         console.log("Exit");
         process.exit(0);
-    };
+    };*/
 console.log(`Logmode: ${JSON.stringify(tolog)}`);
 const { ymd } = fs,
     logger = new fs.logx(fs.path.resolve(__dirname, "log", "mainlogfile.log"), tolog),//POSSIBLE IN TO LOG ["ERR", "WARN", "INFO"]; []=nolog
@@ -46,8 +46,8 @@ function nmbed(strin, g) {
 }
 
 client.on('ready', tr(() => {
-    process.stdin.resume();
-    process.on("SIGINT", stop);
+    /*process.stdin.resume();
+    process.on("SIGINT", stop);*/
     xwrite(`Logged in as ${client.user.tag}!`);
     client.user.setStatus(status[0]);
     stats();
