@@ -37,7 +37,7 @@ client.on('ready', tr(() => {
     stats();
     setInterval(stats, 1000 * 2);
 }, errorm));
-const embedFooterString = "User ${usr} sended this message";
+const embedFooterString = "${usr} sended this message";
 client.on('message', async msg => {
     const splcon = msg.content.split(" ");
     switch (splcon[0].toLowerCase()) {
@@ -52,10 +52,10 @@ client.on('message', async msg => {
                 try {
                     outp = JSON.parse(xxxx);
                 } catch (e) {
-                    msg.reply(nmbed(`I thing you have a Typing: ${xxxx}`, ":warning: embed"));
+                    msg.reply(nmbed(`I thing you have a Typing: \`${Discord.Util.escapeMarkdown(xxxx)}\``, ":warning: embed"));
                     return;
                 }
-                let embedcreator = new Discord.MessageEmbed().setAuthor(msg.author.tag, msg.author.avatarURL(), msg.author.defaultAvatarURL);
+                let embedcreator = new Discord.MessageEmbed().setAuthor(msg.author.tag, msg.author.avatarURL());
                 var mdl = {};
                 for (let ef of things.fields) {
                     var citem = outp[ef.n];
@@ -170,13 +170,13 @@ client.on('message', async msg => {
             }
             const user = msg.mentions.users.first();
             if (user) {
-                let ui = nmbed(`Infos about ${user.username}`, 'Whois')
+                let ui = nmbed(`Infos about ${Discord.Util.escapeMarkdown(user.username)}`, 'Whois')
                     .setThumbnail(user.avatarURL())
-                    .addField("Tag", user.tag)
+                    .addField("Tag", Discord.Util.escapeMarkdown(user.tag))
                     .addField("Bot", user.bot ? "Yes" : "No")
-                    .addField("Flags", JSON.stringify(user.flags.toArray()))
-                    .addField("Account created at", user.createdAt.toUTCString())
-                    .addField("Link to Image", user.avatarURL());
+                    .addField("Flags", Discord.Util.escapeMarkdown(JSON.stringify(user.flags.toArray())))
+                    .addField("Account created at", Discord.Util.escapeMarkdown(user.createdAt.toUTCString()))
+                    .addField("Link to Image", Discord.Util.escapeMarkdown(user.avatarURL()));
                 msg.reply(ui);
                 try {
                     const av = msg.guild != null ? msg.guild.available : false;
@@ -216,10 +216,10 @@ client.on('message', async msg => {
                         try {
                             const connection = await msg.member.voice.channel.join();
                             const dispatcher = connection.play(ytdl(splcon[1], { filter: 'audioonly' }));
-                            const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id, nplay: splcon[1] }) - 1;
+                            const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id, nplay: Discord.Util.escapeMarkdown(splcon[1]) }) - 1;
                             dispatcher.on("start", async () => {
                                 try {
-                                    const msgs = (await msg.reply(nmbed(`Start Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
+                                    const msgs = (await msg.reply(nmbed(`Start Playing \`${Discord.Util.escapeMarkdown(splcon[1])}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
                                     setTimeout(() => {
                                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                                     }, 10000);
@@ -227,7 +227,7 @@ client.on('message', async msg => {
                             });
                             dispatcher.on('finish', async () => {
                                 try {
-                                    const msgs = (await msg.reply(nmbed(`Finished Playing \`${splcon[1]}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
+                                    const msgs = (await msg.reply(nmbed(`Finished Playing \`${Discord.Util.escapeMarkdown(splcon[1])}\``, ':headphones:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset)));
                                     setTimeout(() => {
                                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                                     }, 10000);
@@ -384,45 +384,50 @@ client.on('message', async msg => {
                 };
                 if (splcon.length >= 2) {
                     if (/((http|https):\/\/)?(www\.)?(youtube\.com)(\/)?([a-zA-Z0-9\-\.]+)\/?/.test(splcon[1]) && ytdl.validateURL(splcon[1])) {
+                        let title = "";
+                        let authorlink = "";
+                        let author = "";
+                        let thumbnailicon = "";
+                        const link = splcon[1];
                         try {
-                            let str = ytdl(splcon[1], { filter: 'audioonly' });
-                            let title = "";
-                            let authorlink = "";
-                            let author = "";
-                            const link = splcon[1];
-                            try {
-                                const md = await ymd(splcon[1]);
-                                title = `--${md.title}`;
-                                if (md.embedinfo) {
-                                    title = `${md.embedinfo.author_name}${title}`;
-                                    authorlink = md.embedinfo.author_url;
-                                    author = md.embedinfo.author_name;
+                            const md = await ymd(splcon[1]);
+                            title = `--${md.title}`;
+                            if (md.embedinfo) {
+                                title = Discord.Util.escapeMarkdown(`${md.embedinfo.author_name}${title}`);
+                                authorlink = Discord.Util.escapeMarkdown(md.embedinfo.author_url);
+                                author = Discord.Util.escapeMarkdown(md.embedinfo.author_name);
+                                thumbnailicon = md.embedinfo.thumbnail_url;
+                            }
+                        } catch (e) { }
+                        try {
+                            if (((await ytdl.getBasicInfo(splcon[1])).player_response.streamingData.formats[0].approxDurationMs * 0.000017) <= 10) {
+                                let str = ytdl(splcon[1], { filter: 'audioonly' });
+                                msg.channel.send(nmbed(`:arrow_down: Starting Download`, ':arrow_down: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
+                                str.on("end", cleanupthis);
+                                str.on("error", (err) => {
+                                    cleanupthis();
+                                    msg.reply(nmbed(`An Error Occured`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
+                                    console.log(err);
+                                });
+                                let mbedv = nmbed(
+                                    `Video Converted by \`${msg.author.username}\``,
+                                    ":arrow_down: youtube2discord");
+                                if (author != "") {
+                                    mbedv.addField("Video Creator", authorlink == "" ? `${author}` : `[${author}](${authorlink})`);
                                 }
-                            } catch (e) { }
-                            msg.channel.send(nmbed(`:arrow_down: Starting Download`, ':arrow_down: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
-                            str.on("end", cleanupthis);
-                            str.on("error", (err) => {
-                                cleanupthis();
-                                msg.reply(nmbed(`An Error Occured`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
-                                console.log(err);
-                            });
-                            let mbedv = nmbed(
-                                `Video Converted by \`${msg.author.username}\``,
-                                ":arrow_down: youtube2discord");
-                            if (author != "")
-                                mbedv.addField("Video Creator", authorlink == "" ? `${author}` : `[${author}](${authorlink})`);
-
-                            if (title != "")
-                                mbedv.addField("Vido Title", title != "" ? `[${title}](${link})` : "");
-                            msg.reply(
-                                embedv.attachFiles([new Discord.MessageAttachment(str, `${msg.author.username.split(/[^A-Za-z1-9.]/).join("")}${title}.mp3`)]
-                                )
+                                if (title != "") {
+                                    mbedv.addField("Video Title", title != "" ? `[${title}](${link})` : "");
+                                }
+                                msg.reply(mbedv.attachFiles([new Discord.MessageAttachment(str, `${Discord.Util.escapeMarkdown(msg.author.username.split(/[^A-Za-z1-9.]/).join(""))}_${title}.mp3`)])
                                     .setColor(0x33ccff)
                                     .setAuthor(msg.author.username, msg.author.avatarURL()).setThumbnail(things.headasset));
+                            } else {
+                                msg.reply(nmbed(`The Video is to Big to Upload it\n[But you can view it here](${link})`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
+                            }
                         } catch (e) {
                             cleanupthis();
                             try {
-                                const msgs = await msg.reply(nmbed(`Connection Timeout to Discord`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
+                                const msgs = await msg.reply(nmbed(`Connection Timeout to Discord`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
                                 setTimeout(() => {
                                     if (msgs.deletable) msgs.delete({ timeout: 5 });
                                 }, 10000);
@@ -431,7 +436,7 @@ client.on('message', async msg => {
                     } else {
                         cleanupthis();
                         try {
-                            const msgs = await msg.reply(nmbed(`The Url doesn't work`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
+                            const msgs = await msg.reply(nmbed(`The Url doesn't work`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
                             setTimeout(() => {
                                 if (msgs.deletable) msgs.delete({ timeout: 5 });
                             }, 10000);
