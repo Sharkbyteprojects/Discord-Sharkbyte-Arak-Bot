@@ -3,8 +3,6 @@
 ## How to Use:
 Register a bot on discord and copy the token
 
-Download this repos
-
 create the file `usr.json` in settings
 
 Enter in this `usr.json` ```
