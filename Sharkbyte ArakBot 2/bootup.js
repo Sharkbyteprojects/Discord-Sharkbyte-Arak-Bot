@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //<c>SHARKBYTEPROJECTS
 //https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot
-console.log("Sharkbyte ARAK Discord Bot BootupService\n\xa9 Sharkbyteprojects");
+console.log("\u001b[31mSharkbyte ARAK Discord Bot BootupService\n\xa9 Sharkbyteprojects");
 const { program } = require('commander'),
     package = require("./package.json"),
     fs = require("fs"),
@@ -37,8 +37,8 @@ if (token != "") {
     wo();
 
 if (fileex) {
-    console.log("Booting up main App");
+    console.log("Booting up main App\n\u001b[0m");
     require("./app");//SHOUD START APP
 } else {
-    console.log("OOOPS, TOKEN NOT DEFINED, DEFINE A TOKEN WITH -t \"newtoken\"");
+    console.log("OOOPS, TOKEN NOT DEFINED, DEFINE A TOKEN WITH:\n sharkdiscordbot -t \"newtoken\"\n\u001b[0m");
 }
