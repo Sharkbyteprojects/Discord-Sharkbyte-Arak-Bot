@@ -1,18 +1,29 @@
 'use strict';
 console.log("Sharkbyte ARAK Discord Bot\n\xa9 Sharkbyteprojects");
-const botkey = require("./settings/usr.json").key;
-const status = ['available', 'idle', 'dnd', 'invisible'];
-const Discord = require('discord.js');
-const client = new Discord.Client();
-var userplayer = [];
-const fs = require("./appfiles/ftool");
-const tr = require("./appfiles/trcatch");
-const ytdl = require('ytdl-core');
-const { ymd } = require("./appfiles/ftool");
-const things = { sstne: "Something stored doesn't exist, but that's not a Problem", fields: require("./appfiles/names_nochange.json"), help: require("./appfiles/help.json"), dtypedecode: ["string", "[[string]]"], dtd: ["string", "object"], headasset: "https://github.com/fire-engine-icons/img-host/raw/master/hfws_hsm_emote.png" };
-
+var userplayer = [],
+    sessionsofyt2discord = [];
+const { botkey, tolog } = require("./settings/usr.json"),
+    status = ['available', 'idle', 'dnd', 'invisible'],
+    Discord = require('discord.js'),
+    client = new Discord.Client(),
+    fs = require("./appfiles/ftool"),
+    tr = require("./appfiles/trcatch"),
+    ytdl = require('ytdl-core'),
+    stop = async () => {
+        try {
+            await client.user.setStatus(status[2]);
+        } catch (e) {
+            console.log("Can't set Status");
+        }
+        console.log("Exit");
+        process.exit(0);
+    };
+console.log(`Logmode: ${JSON.stringify(tolog)}`);
+const { ymd } = fs,
+    logger = new fs.logx(fs.path.resolve(__dirname, "log", "mainlogfile.log"), tolog),//POSSIBLE IN TO LOG ["ERR", "WARN", "INFO"]; []=nolog
+    things = { sstne: "Something stored doesn't exist, but that's not a Problem", fields: require("./appfiles/names_nochange.json"), help: require("./appfiles/help.json"), dtypedecode: ["string", "[[string]]"], dtd: ["string", "object"], headasset: "https://github.com/fire-engine-icons/img-host/raw/master/hfws_hsm_emote.png" };
 function errorm(e) {
-    client.user.setStatus(status[3]);
+    client.user.setStatus(status[2]);
     console.error(e);
 }
 
@@ -20,7 +31,10 @@ const stats = () => {
     const booool = userplayer.length > 0;
     client.user.setActivity(`${booool ? `Musicsessions: ${userplayer.length} | ` : ""}-help`, { type: booool ? "PLAYING" : "WATCHING" });
 };
-
+function xwrite(x) {
+    logger.emit("info", x);
+    console.log(x);
+}
 function nmbed(strin, g) {
     let embed = new Discord.MessageEmbed()
         .setTitle(g)
@@ -30,15 +44,19 @@ function nmbed(strin, g) {
         .setFooter("\xa9 Sharkbyteprojects");
     return embed;
 }
-var sessionsofyt2discord = [];
+
 client.on('ready', tr(() => {
-    console.log(`Logged in as ${client.user.tag}!`);
+    process.stdin.resume();
+    process.on("SIGINT", stop);
+    xwrite(`Logged in as ${client.user.tag}!`);
     client.user.setStatus(status[0]);
     stats();
     setInterval(stats, 1000 * 2);
 }, errorm));
 const embedFooterString = "${usr} sended this message";
 client.on('message', async msg => {
+    logger.emit("info", `${msg.author.username}(${msg.author.tag}) ${msg.author.bot ? "Bot" : ""} typed "${msg.content}" in the server "${msg.guild && msg.guild.available ? msg.guild.name : "privatechat"}" on the channel ${msg.channel.name}`);
+    if (msg.author.bot) { return; }
     const splcon = msg.content.split(" ");
     switch (splcon[0].toLowerCase()) {
         case ("-embed"): {
@@ -53,6 +71,7 @@ client.on('message', async msg => {
                     outp = JSON.parse(xxxx);
                 } catch (e) {
                     msg.reply(nmbed(`I thing you have a Typing: \`${Discord.Util.escapeMarkdown(xxxx)}\``, ":warning: embed"));
+                    logger.emit("warn", `Error in -embed, first catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
                     return;
                 }
                 let embedcreator = new Discord.MessageEmbed().setAuthor(msg.author.tag, msg.author.avatarURL());
@@ -78,13 +97,17 @@ client.on('message', async msg => {
                 var hexnum = 0x3366ff;
                 try {
                     hexnum = parseInt(`0x${mdl.color}`);
-                } catch (er) { sw(); }
+                } catch (er) {
+                    logger.emit("warn", `Error in -embed, int parse catch block: ${JSON.stringify(er)} emitted by user ${msg.author.tag}`);
+                    sw();
+                }
                 embedcreator
                     .setDescription(mdl.description)
                     .setColor(hexnum)
                     .setTitle(mdl.title)
                     .setFooter(embedFooterString.replace("${usr}", msg.author.username));
                 msg.channel.send(embedcreator);
+                xwrite(`User "${msg.author.tag}" created a -embed`);
             }
             else {
                 let embedcreator = new Discord.MessageEmbed()
@@ -134,12 +157,12 @@ client.on('message', async msg => {
             if (msg.deletable) msg.delete({ timeout: 5 });
             const guild = msg.guild;
             if (guild == null || !guild.available) {
-                msg.reply(nmbed(`Failue, you running not on a GUILD`, ':warning: Server Management - Admin'));
+                msg.reply(nmbed(`Failue, you running not on a GUILD\nCurrent Bot Logmode: \`\`\`json\n${JSON.stringify(tolog)}\`\`\``, ':warning: :gear: Server Management - Admin'));
                 return;
             }
             msg.guild.members.fetch(msg.guild.ownerID)
                 .then(guildMember => {
-                    msg.reply(nmbed(`The admin is ${guild.member(guildMember) ? guildMember.toString() : guild.owner.user.tag}`, 'Server Management - Admin'));
+                    msg.reply(nmbed(`The admin is ${guild.member(guildMember) ? guildMember.toString() : guild.owner.user.tag}\nCurrent Bot Logmode: \`\`\`json\n${JSON.stringify(tolog)}\`\`\``, ':gear: Server Management - Admin'));
                 }); break;
         }
         case ("-usrlist"): {
@@ -165,7 +188,9 @@ client.on('message', async msg => {
                     setTimeout(() => {
                         if (xr.deletable) xr.delete({ timeout: 5 });
                     }, 4000);
-                } catch (e) { }
+                } catch (e) {
+                    logger.emit("warn", `Error in -whois, first catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
                 return;
             }
             const user = msg.mentions.users.first();
@@ -181,14 +206,18 @@ client.on('message', async msg => {
                 try {
                     const av = msg.guild != null ? msg.guild.available : false;
                     await user.send(nmbed('You where `-whois`', ":question:  WHOIS Information").addField(":service_dog: Server", av ? msg.guild.name : "No server Information available").addField("by", msg.author.username).addField("Tag of User", msg.author.tag).setAuthor(msg.author.tag, msg.author.avatarURL()).setThumbnail(av ? msg.guild.iconURL() : msg.author.avatarURL()));
-                } catch (nulls) { }
+                } catch (nulls) {
+                    logger.emit("warn", `Error in -whois, second catch block: ${JSON.stringify(nulls)} emitted by user ${msg.author.tag}`);
+                }
             } else {
                 try {
                     const xr = await msg.reply(nmbed(`No User mentioned`, 'Whois'));
                     setTimeout(() => {
                         if (xr.deletable) xr.delete({ timeout: 5 });
                     }, 4000);
-                } catch (e) { }
+                } catch (e) {
+                    logger.emit("warn", `Error in -whois, third catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
             }
             break;
         }
@@ -207,7 +236,10 @@ client.on('message', async msg => {
                     if (dis) {
                         (await dis.destroy());
                     }
-                } catch (e) { console.warn(things.sstne); }
+                } catch (e) {
+                    logger.emit("warn", `Error in -play, first catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                    console.warn(things.sstne);
+                }
             }
             // Only try to join the sender's voice channel if they are in one themselves
             if (msg.member.voice.channel) {
@@ -219,7 +251,9 @@ client.on('message', async msg => {
                                 const md = await ymd(splcon[1]);
                                 title = Discord.Util.escapeMarkdown(md.title);
                                 shortlinkUrl = md.shortlinkUrl;
-                            } catch (e) { }
+                            } catch (e) {
+                                logger.emit("warn", `Error in -play, second catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                            }
                             const connection = await msg.member.voice.channel.join();
                             const dispatcher = connection.play(ytdl(splcon[1], { filter: 'audioonly' }));
                             const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id, nplay: (title == "" ? `${Discord.Util.escapeMarkdown(splcon[1])}` : shortlinkUrl == "" ? `${title}` : `[${title}](${shortlinkUrl})`) }) - 1;
@@ -229,7 +263,9 @@ client.on('message', async msg => {
                                     setTimeout(() => {
                                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                                     }, 10000);
-                                } catch (e) { }
+                                } catch (e) {
+                                    logger.emit("warn", `Error in -play, third catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                                }
                             });
                             dispatcher.on('finish', async () => {
                                 try {
@@ -237,7 +273,9 @@ client.on('message', async msg => {
                                     setTimeout(() => {
                                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                                     }, 10000);
-                                } catch (e) { }
+                                } catch (e) {
+                                    logger.emit("warn", `Error in -play, fourth catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                                }
                                 userplayer.splice(cc);
                                 msg.member.voice.channel.leave();
                             });
@@ -247,14 +285,22 @@ client.on('message', async msg => {
                                     setTimeout(() => {
                                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                                     }, 10000);
-                                } catch (e) { }
+                                } catch (e) {
+                                    logger.emit("err", `Error in -play, error catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                                }
+                                logger.emit("err", `Error in -play, first catch block: ${JSON.stringify(xer)} emitted by user ${msg.author.tag}`);
                                 console.error(xer);
                             });
                         } catch (e) {
-                            const msgs = await msg.reply(nmbed(`The Url doesn't work or\nConnection Timeout to Discord`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
-                            setTimeout(() => {
-                                if (msgs.deletable) msgs.delete({ timeout: 5 });
-                            }, 10000);
+                            try {
+                                logger.emit("warn", `Error in -play, urlerror catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                                const msgs = await msg.reply(nmbed(`The Url doesn't work or\nConnection Timeout to Discord`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                                setTimeout(() => {
+                                    if (msgs.deletable) msgs.delete({ timeout: 5 });
+                                }, 10000);
+                            } catch (e) {
+                                logger.emit("warn", `Error in -play, urlerror.inner catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                            }
                         }
                     } else {
                         try {
@@ -262,19 +308,29 @@ client.on('message', async msg => {
                             setTimeout(() => {
                                 if (msgs.deletable) msgs.delete({ timeout: 5 });
                             }, 10000);
-                        } catch (e) { }
+                        } catch (e) {
+                            logger.emit("warn", `Error in -play, urlerror2 catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                        }
                     }
                 } else {
-                    const msgs = await msg.reply(nmbed(`We need a YouTube Video as second arg!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                    try {
+                        const msgs = await msg.reply(nmbed(`We need a YouTube Video as second arg!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                        setTimeout(() => {
+                            if (msgs.deletable) msgs.delete({ timeout: 5 });
+                        }, 10000);
+                    } catch (e) {
+                        logger.emit("warn", `Error in -play, url second arg catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                    }
+                }
+            } else {
+                try {
+                    const msgs = await msg.reply(nmbed(`You need to join a voice channel first!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
                     setTimeout(() => {
                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                     }, 10000);
+                } catch (e) {
+                    logger.emit("warn", `Error in -play, joinvoicechannel catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
                 }
-            } else {
-                const msgs = await msg.reply(nmbed(`You need to join a voice channel first!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
-                setTimeout(() => {
-                    if (msgs.deletable) msgs.delete({ timeout: 5 });
-                }, 10000);
             }
             break;
         }
@@ -301,15 +357,23 @@ client.on('message', async msg => {
                         setTimeout(() => {
                             if (msgs.deletable) msgs.delete({ timeout: 5 });
                         }, 10000);
-                    } else { console.warn(`${things.sstne}*`); }
-                } catch (e) { console.warn(things.sstne); }
+                    } else {
+                        console.warn(`${things.sstne}*`);
+                        logger.emit("warn", JSON.stringify(things.sstne));
+                    }
+                } catch (e) {
+                    console.warn(things.sstne);
+                    logger.emit("warn", `Error in -cleanup_player, catch: ${JSON.stringify(things.sstne)} emitted by user ${msg.author.tag}`);
+                }
             } else {
                 try {
                     const msgs = await msg.reply(nmbed(`Nothing to Cleanup`, ':warning:  VoiceChannel').setThumbnail(things.headasset));
                     setTimeout(() => {
                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                     }, 10000);
-                } catch (e) { }
+                } catch (e) {
+                    logger.emit("warn", `Error in -cleanup_player, second catch block: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
             }
             break;
         }
@@ -332,14 +396,19 @@ client.on('message', async msg => {
                             if (msgs.deletable) msgs.delete({ timeout: 5 });
                         }, 10000);
                     }
-                } catch (e) { console.warn(things.sstne); }
+                } catch (e) {
+                    console.warn(things.sstne);
+                    logger.emit("warn", `Error in -pause_player, catch1: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
             } else {
                 try {
                     const msgs = await msg.reply(nmbed(`Nothing to Pause`, ':warning:  VoiceChannel').setColor(0xffff00).setThumbnail(things.headasset));
                     setTimeout(() => {
                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                     }, 10000);
-                } catch (e) { }
+                } catch (e) {
+                    logger.emit("warn", `Error in -pause_player, catch2: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
             }
             break;
         }
@@ -361,14 +430,19 @@ client.on('message', async msg => {
                             if (msgs.deletable) msgs.delete({ timeout: 5 });
                         }, 10000);
                     }
-                } catch (e) { console.warn(things.sstne); }
+                } catch (e) {
+                    logger.emit("warn", `Error in -resume_player, catch1: ${JSON.stringify(things.sstne)}${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                    console.warn(things.sstne);
+                }
             } else {
                 try {
                     const msgs = await msg.reply(nmbed(`Nothing to Resume`, ':warning:  VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
                     setTimeout(() => {
                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                     }, 10000);
-                } catch (e) { }
+                } catch (e) {
+                    logger.emit("warn", `Error in -resume_player, catch2: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                }
             }
             break;
         }
@@ -381,18 +455,24 @@ client.on('message', async msg => {
                     setTimeout(() => {
                         if (ld.deletable) ld.delete({ timeout: 5 });
                     }, 5000);
-                } catch (ex) { }
+                } catch (ex) {
+                    logger.emit("warn", `Error in -youtube2discord, catch1: ${JSON.stringify(ex)} emitted by user ${msg.author.tag}`);
+                }
             } else {
                 const position = sessionsofyt2discord.push(msg.author.id) - 1;
                 const cleanupthis = () => {
+                    logger.emit("info", `User ${msg.author.tag} converter cleaning up`);
                     if (sessionsofyt2discord.includes(msg.author.id)) {
                         sessionsofyt2discord.splice(position, 1);
+                    } else {
+                        logger.emit("err", `Unexpected output -youtube2discord | User: ${msg.author.tag} | List: ${JSON.stringify(sessionsofyt2discord)}`);
                     }
                 };
                 if (splcon.length >= 2) {
                     if (/((http|https):\/\/)?(www\.)?(youtube\.com)(\/)?([a-zA-Z0-9\-\.]+)\/?/.test(splcon[1]) && ytdl.validateURL(splcon[1])) {
                         let title = "", authorlink = "", author = "", thumbnailicon = "";
                         const link = splcon[1];
+                        logger.emit("info", `User ${msg.author.tag} conveting the video ${splcon[1]}`);
                         try {
                             const md = await ymd(splcon[1]);
                             title = `--${Discord.Util.escapeMarkdown(md.title)}`;
@@ -402,7 +482,9 @@ client.on('message', async msg => {
                                 author = Discord.Util.escapeMarkdown(md.embedinfo.author_name);
                                 thumbnailicon = md.embedinfo.thumbnail_url;
                             }
-                        } catch (e) { }
+                        } catch (e) {
+                            logger.emit("warn", `Error in -youtube2discord, catch2: ${JSON.stringify(ex)} emitted by user ${msg.author.tag}`);
+                        }
                         try {
                             if (((await ytdl.getBasicInfo(splcon[1])).player_response.streamingData.formats[0].approxDurationMs * 0.000017) <= 10) {
                                 let str = ytdl(splcon[1], { filter: 'audioonly' });
@@ -422,7 +504,7 @@ client.on('message', async msg => {
                                 if (title != "") {
                                     mbedv.addField("Video Title", title != "" ? `[${title}](${link})` : "");
                                 }
-                                msg.reply(mbedv.attachFiles([new Discord.MessageAttachment(str, `${Discord.Util.escapeMarkdown(msg.author.username.split(/[^A-Za-z1-9.]/).join(""))}_${title}.mp3`)])
+                                msg.reply(mbedv.attachFiles([new Discord.MessageAttachment(str, `${Discord.Util.escapeMarkdown(msg.author.username.split(/[^A-Za-z1-9\.]/).join(""))}_${title}.mp3`)])
                                     .setColor(0x33ccff)
                                     .setAuthor(msg.author.username, msg.author.avatarURL()).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
                             } else {
@@ -430,13 +512,16 @@ client.on('message', async msg => {
                                 msg.reply(nmbed(`The Video is to Big to Upload it\n[But you can view it here](${link})`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
                             }
                         } catch (e) {
+                            logger.emit("warn", `Error in -youtube2discord, catch3: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
                             cleanupthis();
                             try {
                                 const msgs = await msg.reply(nmbed(`Connection Timeout to Discord`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(thumbnailicon && thumbnailicon != "" ? thumbnailicon : things.headasset));
                                 setTimeout(() => {
                                     if (msgs.deletable) msgs.delete({ timeout: 5 });
                                 }, 10000);
-                            } catch (e) { }
+                            } catch (e) {
+                                logger.emit("warn", `Error in -youtube2discord, catch4: ${JSON.stringify(e)} emitted by user ${msg.author.tag}`);
+                            }
                         }
                     } else {
                         cleanupthis();
@@ -445,7 +530,9 @@ client.on('message', async msg => {
                             setTimeout(() => {
                                 if (msgs.deletable) msgs.delete({ timeout: 5 });
                             }, 10000);
-                        } catch (e) { }
+                        } catch (e) {
+                            logger.emit("warn", `Error in -youtube2discord, catch5: ${JSON.stringify(ex)} emitted by user ${msg.author.tag}`);
+                        }
                     }
                 } else {
                     cleanupthis();
@@ -454,7 +541,9 @@ client.on('message', async msg => {
                         setTimeout(() => {
                             if (msgs.deletable) msgs.delete({ timeout: 5 });
                         }, 10000);
-                    } catch (e) { }
+                    } catch (e) {
+                        logger.emit("warn", `Error in -youtube2discord, catch6: ${JSON.stringify(ex)} emitted by user ${msg.author.tag}`);
+                    }
                 }
             }
             break;
