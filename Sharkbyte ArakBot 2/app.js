@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+//<c>SHARKBYTEPROJECTS
+//https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot
 'use strict';
 console.log("Sharkbyte ARAK Discord Bot\n\xa9 Sharkbyteprojects");
 var userplayer = [],
@@ -554,4 +556,4 @@ client.on('message', async msg => {
     }
 });
 
-client.login(botkey);
+client.login(botkey).then(() => { console.log("ClientLogin Ok"); }, (err) => { console.log(err);});

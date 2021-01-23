@@ -32,6 +32,9 @@
     <Content Include="appfiles\ftool.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="bootup.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="settings\.gitignore" />
     <Content Include="appfiles\help.json">
       <SubType>Code</SubType>

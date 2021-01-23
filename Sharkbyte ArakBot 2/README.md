@@ -1,7 +1,7 @@
 # Sharkbyte ArakBot 2
 
 ## How to Use:
-Register a bot on discord and copy the token
+Register a bot on [discord](https://discord.com/developers/applications) and copy the token
 
 create the file `usr.json` in settings
 
