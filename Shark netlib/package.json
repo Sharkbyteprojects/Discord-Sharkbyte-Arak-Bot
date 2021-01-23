@@ -1,0 +1,9 @@
+{
+  "name": "shark-netlib",
+  "version": "0.0.1",
+  "description": "Shark netlib - a Simple Get Function as a Promise",
+  "main": "app.js",
+  "author": {
+    "name": "Sharkbyteprojects"
+  }
+}

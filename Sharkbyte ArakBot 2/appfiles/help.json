@@ -1,5 +1,6 @@
 {
   "help": {
+    "desc": "How to use this Bot",
     "field": {
       "-embed": "Create a embed from a json",
       "-help": "Display this, second arg = help to an element (without `-`)",
@@ -11,13 +12,15 @@
       "-pause_player": "Pauses the playerm until it will startet by `-resume_player` or stopped by `-cleanup_player`",
       "-resume_player": "Resume the player if it paused by `-pause_player`"
     },
-    "desc": "How to use this Bot"
+    "img": "https://github.com/fire-engine-icons/img-host/raw/master/helpicon.webp"
   },
   "embed": {
     "field": {
       "Example usage": "`-embed {\"title\":\"Hey\", \"description\": \"Some example description\", \"fields\": {\"Hello\": \"World\", \"Heading\": \"Content\"}}`",
       "Show Possible JSON input": "-embed"
     },
+    "imup": "Embed.webp",
+    "img": "attachment://Embed.webp",
     "desc": "Usage of this module"
   },
   "admin": {

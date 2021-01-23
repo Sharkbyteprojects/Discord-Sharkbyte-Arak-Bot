@@ -2,14 +2,14 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <Name>Sharkbyte ArakBot 2</Name>
-    <RootNamespace>Sharkbyte ArakBot 2</RootNamespace>
+    <Name>Shark netlib</Name>
+    <RootNamespace>Shark netlib</RootNamespace>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0b4590c8-7913-4dd6-9c5f-cd9e569efa45</ProjectGuid>
+    <ProjectGuid>7bedfb95-5b12-4b9c-8846-e170db01a7dd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>app.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
@@ -29,32 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.js" />
-    <Content Include="appfiles\ftool.js">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="settings\.gitignore" />
-    <Content Include="settings\gob.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="appfiles\help.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="appfiles\names_nochange.json">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="appfiles\trcatch.js">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="settings\usr.json">
-      <SubType>Code</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="appfiles\" />
-    <Folder Include="appfiles\assets\" />
-    <Folder Include="settings\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
 </Project>

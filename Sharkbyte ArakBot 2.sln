@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Sharkbyte ArakBot 2", "Sharkbyte ArakBot 2\Sharkbyte ArakBot 2.njsproj", "{0B4590C8-7913-4DD6-9C5F-CD9E569EFA45}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "youtubeMetaData", "youtubeMetaData\youtubeMetaData.njsproj", "{A1A6EBD8-6965-46DB-BCB4-D55643780857}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Shark netlib", "Shark netlib\Shark netlib.njsproj", "{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dependency", "dependency", "{A50345EE-B40A-44A1-B3E4-6EF98DCB7BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +21,21 @@ Global
 		{0B4590C8-7913-4DD6-9C5F-CD9E569EFA45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B4590C8-7913-4DD6-9C5F-CD9E569EFA45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B4590C8-7913-4DD6-9C5F-CD9E569EFA45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A6EBD8-6965-46DB-BCB4-D55643780857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A6EBD8-6965-46DB-BCB4-D55643780857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A6EBD8-6965-46DB-BCB4-D55643780857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A6EBD8-6965-46DB-BCB4-D55643780857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1A6EBD8-6965-46DB-BCB4-D55643780857} = {A50345EE-B40A-44A1-B3E4-6EF98DCB7BDD}
+		{7BEDFB95-5B12-4B9C-8846-E170DB01A7DD} = {A50345EE-B40A-44A1-B3E4-6EF98DCB7BDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99E5CBF2-813C-4C1C-9384-26ED98F14915}

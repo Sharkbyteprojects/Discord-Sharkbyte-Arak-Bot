@@ -1,0 +1,13 @@
+{
+  "name": "youtube-meta-data",
+  "version": "0.0.2",
+  "description": "get youtubeMetaData",
+  "main": "ytm.js",
+  "author": {
+    "name": "Sharkbyteprojects"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.5",
+    "shark-netlib": "0.0.1"
+  }
+}
