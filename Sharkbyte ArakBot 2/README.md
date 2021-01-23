@@ -7,7 +7,7 @@ Download this repos
 
 create the file `usr.json` in settings
 
-Enter in this `usr.json` ```json 
+Enter in this `usr.json` ```
 {
   "botkey": "yourbotkey"
 }
