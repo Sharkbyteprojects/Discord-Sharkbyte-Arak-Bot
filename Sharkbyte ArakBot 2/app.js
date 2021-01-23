@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 console.log("Sharkbyte ARAK Discord Bot\n\xa9 Sharkbyteprojects");
 var userplayer = [],
@@ -20,7 +21,7 @@ const { botkey, tolog } = require("./settings/usr.json"),
     };*/
 console.log(`Logmode: ${JSON.stringify(tolog)}`);
 const { ymd } = fs,
-    logger = new fs.logx(fs.path.resolve(__dirname, "log", "mainlogfile.log"), tolog),//POSSIBLE IN TO LOG ["ERR", "WARN", "INFO"]; []=nolog
+    logger = new fs.logx(fs.path.resolve(__dirname, "log", "mainlogfile.log"), tolog ? tolog : []),//POSSIBLE IN TO LOG ["ERR", "WARN", "INFO"]; []=nolog
     things = { sstne: "Something stored doesn't exist, but that's not a Problem", fields: require("./appfiles/names_nochange.json"), help: require("./appfiles/help.json"), dtypedecode: ["string", "[[string]]"], dtd: ["string", "object"], headasset: "https://github.com/fire-engine-icons/img-host/raw/master/hfws_hsm_emote.png" };
 function errorm(e) {
     client.user.setStatus(status[2]);
