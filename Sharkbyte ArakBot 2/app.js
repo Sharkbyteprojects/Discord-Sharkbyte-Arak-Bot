@@ -406,13 +406,19 @@ client.on('message', async msg => {
                                 msg.reply(nmbed(`An Error Occured`, ':warning: youtube2discord').setColor(0x33ccff).setThumbnail(things.headasset));
                                 console.log(err);
                             });
-                            msg.reply(nmbed(
-                                `Video Converted by \`${msg.author.username}\`${author != "" || title != "" ? "\n" : ""}${author != "" ? (authorlink == "" ? `${author}` : `[${author}](${authorlink})`) : ""}${author != "" && title != "" ? " - " : ""}${title != "" ? `[${title}](${link})` : ""}`,
-                                ":arrow_down: youtube2discord")
-                                .attachFiles([new Discord.MessageAttachment(str, `${msg.author.username.split(/[^A-Za-z1-9.]/).join("")}${title}.mp3`)]
+                            let mbedv = nmbed(
+                                `Video Converted by \`${msg.author.username}\``,
+                                ":arrow_down: youtube2discord");
+                            if (author != "")
+                                mbedv.addField("Video Creator", authorlink == "" ? `${author}` : `[${author}](${authorlink})`);
+
+                            if (title != "")
+                                mbedv.addField("Vido Title", title != "" ? `[${title}](${link})` : "");
+                            msg.reply(
+                                embedv.attachFiles([new Discord.MessageAttachment(str, `${msg.author.username.split(/[^A-Za-z1-9.]/).join("")}${title}.mp3`)]
                                 )
-                                .setColor(0x33ccff)
-                                .setAuthor(msg.author.username, msg.author.avatarURL()).setThumbnail(things.headasset));
+                                    .setColor(0x33ccff)
+                                    .setAuthor(msg.author.username, msg.author.avatarURL()).setThumbnail(things.headasset));
                         } catch (e) {
                             cleanupthis();
                             try {
