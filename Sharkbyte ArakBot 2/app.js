@@ -366,6 +366,7 @@ client.on('message', async msg => {
             }
             break;
         }
+        case ("-youtubetodiscord"):
         case ("-youtube2discord"): {
             if (msg.deletable) msg.delete({ timeout: 5 });
             if (sessionsofyt2discord.includes(msg.author.id)) {
