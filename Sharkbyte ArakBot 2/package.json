@@ -1,6 +1,6 @@
 {
-  "name": "sharkbyte-arak-bot-2",
-  "version": "0.0.0",
+  "name": "sharkdiscordbot",
+  "version": "0.0.3",
   "description": "Sharkbyte ArakBot 2",
   "main": "app.js",
   "author": {

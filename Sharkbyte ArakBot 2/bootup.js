@@ -27,6 +27,9 @@ try {
 }
 const wo = () => {
     tchange.tolog = newd;
+    try {
+        fs.mkdirSync(require("path").resolve(__dirname, "settings"));
+    } catch (e) { }
     fs.writeFileSync(path, JSON.stringify(tchange));
 }
 if (token != "") {

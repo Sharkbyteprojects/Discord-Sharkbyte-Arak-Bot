@@ -1,0 +1,5 @@
+*.njsproj
+settings
+obj
+node_modules
+bin
