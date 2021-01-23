@@ -200,8 +200,8 @@ client.on('message', async msg => {
             if (msg.member.voice.channel) {
                 if (splcon.length >= 2) {
                     if (/((http|https):\/\/)?(www\.)?(youtube\.com)(\/)?([a-zA-Z0-9\-\.]+)\/?/.test(splcon[1])) {
-                        const connection = await msg.member.voice.channel.join();
                         try {
+                            const connection = await msg.member.voice.channel.join();
                             const dispatcher = connection.play(ytdl(splcon[1], { filter: 'audioonly' }));
                             const cc = userplayer.push({ dis: dispatcher, c: msg.member.voice.channel, master: msg.author.id }) - 1;
                             dispatcher.on("start", async () => {
@@ -226,14 +226,14 @@ client.on('message', async msg => {
                                 console.error(xer);
                             });
                         } catch (e) {
-                            const msgs = await msg.reply(nmbed(`I think the Url doesn't work!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                            const msgs = await msg.reply(nmbed(`The Url doesn't work or\nConnection Timeout to Discord`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
                             setTimeout(() => {
                                 if (msgs.deletable) msgs.delete({ timeout: 5 });
                             }, 10000);
                         }
                     }
                 } else {
-                    const msgs = awaitmsg.reply(nmbed(`We need a YouTube Video as second arg!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
+                    const msgs = await msg.reply(nmbed(`We need a YouTube Video as second arg!`, ':warning: VoiceChannel').setColor(0x66ff66).setThumbnail(things.headasset));
                     setTimeout(() => {
                         if (msgs.deletable) msgs.delete({ timeout: 5 });
                     }, 10000);
