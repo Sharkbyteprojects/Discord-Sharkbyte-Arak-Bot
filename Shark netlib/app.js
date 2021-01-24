@@ -6,18 +6,18 @@ function main(link, flr) {
     return new Promise((ok, erro) => {
         const urlofvid = new URL(link);
         try {
-            (urlofvid.protocol == 'https:' ? https : http).request(urlofvid, response => {
+            (urlofvid.protocol == 'https:' ? https : http).request(urlofvid, async response => {
                 let body = '';
                 if (flr && response.headers.location) {
-                    main(response.headers.location).then((ds) => {
-                        ok(ds);
-                    }, (err) => {
-                            erro(err);
-                    });
+                    try {
+                        ok(await main(response.headers.location));
+                    } catch (e) {
+                        erro(e);
+                    }
                 }
                 response.on("data", chunk => body += chunk);
                 response.on("end", () => {
-                    ok(body);
+                    ok({ body, redirectedto: link });
                 });
                 response.on("error", erro);
             }).end();
