@@ -1,6 +1,6 @@
 {
   "name": "youtube-meta-data",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "get youtubeMetaData",
   "main": "ytm.js",
   "author": {
@@ -10,5 +10,10 @@
     "cheerio": "^1.0.0-rc.5",
     "shark-netlib": "^1.2.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "directory": "youtubeMetaData",
+    "url": "https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot.git"
+  }
 }

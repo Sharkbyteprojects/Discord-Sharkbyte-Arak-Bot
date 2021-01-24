@@ -11,7 +11,8 @@ ex = require("path"),
 program
     .option('-t, --token <token>', 'Discord bot token - needed for the first start or if token changed', '')
     .option('-l, --tolog <tolog>', 'Set log List (DEVS)', '[]')
-    .option("-ds, --nostore", "Disable File Writing (SETTINGS AND LOG, THE SETTING \"--tolog\" will ignored!)")
+    .option("-ds, --nostore", "Disable File Writing (SETTINGS AND LOG, THE SETTING \"--tolog\" will ignored!)", false)
+    .option("-r, --oneprocess", "Create only one Process, uses require to start app", false)
     .version(package.version);
 program.parse(process.argv);
 console.log("\u001b[31m");
@@ -61,8 +62,15 @@ if (!options.nostore) {
 
 if (fileex || tchange.botkey) {
     console.log("Booting up main App\n\u001b[0m");
-    //require("./app");//SHOUD START APP:
-    const mainapp = fork(ex.resolve(__dirname, "app.js"), [], { env: { "DiscordBotSettings": JSON.stringify(tchange) } });
+    ////SHOUD START APP:
+    const toenv = { "DiscordBotSettings": JSON.stringify(tchange) };
+    if (!options.oneprocess) {
+        const mainapp = fork(ex.resolve(__dirname, "app.js"), [], { env: toenv });
+        console.log(`\u001b[31mPID OF BOT: ${mainapp.pid}\nPID OF BOOTUP: ${process.pid}\u001b[0m`);
+    } else {
+        process.env = { ...process.env, ...toenv };
+        require("./app");
+    }
 } else {
-    console.log("OOOPS, TOKEN NOT DEFINED, DEFINE A TOKEN WITH:\n sharkdiscordbot -t \"newtoken\"\n");
+    console.log("\u001b[31mOOOPS, TOKEN NOT DEFINED, DEFINE A TOKEN WITH:\n sharkdiscordbot -t \"newtoken\"\n\u001b[0m");
 }
