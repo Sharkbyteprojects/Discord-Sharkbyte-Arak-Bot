@@ -1,13 +1,13 @@
 {
   "name": "sharkdiscordbot",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Sharkbyte ArakBot 2",
   "main": "app.js",
   "author": {
     "name": "Sharkbyteprojects"
   },
   "bin": {
-    "sharkdiscordbot": "./bootup.js"
+    "sharkdiscordbot": "./sharkdiscordbot.js"
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.3",

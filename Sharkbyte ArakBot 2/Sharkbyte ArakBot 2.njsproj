@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0b4590c8-7913-4dd6-9c5f-cd9e569efa45</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>bootup.js</StartupFile>
+    <StartupFile>sharkdiscordbot.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -33,7 +33,7 @@
     <Content Include="appfiles\ftool.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="bootup.js">
+    <Content Include="sharkdiscordbot.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="settings\.gitignore" />
