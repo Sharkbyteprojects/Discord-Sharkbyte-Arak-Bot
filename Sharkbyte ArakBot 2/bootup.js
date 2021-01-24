@@ -62,7 +62,7 @@ if (!options.nostore) {
 if (fileex || tchange.botkey) {
     console.log("Booting up main App\n\u001b[0m");
     //require("./app");//SHOUD START APP:
-    const mainapp=fork(ex.resolve(__dirname, "app.js"), [], { env: { "DiscordBotSettings": JSON.stringify(tchange) } });
+    const mainapp = fork(ex.resolve(__dirname, "app.js"), [], { env: { "DiscordBotSettings": JSON.stringify(tchange) } });
 } else {
     console.log("OOOPS, TOKEN NOT DEFINED, DEFINE A TOKEN WITH:\n sharkdiscordbot -t \"newtoken\"\n");
 }

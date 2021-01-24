@@ -1,6 +1,6 @@
 {
   "name": "sharkdiscordbot",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Sharkbyte ArakBot 2",
   "main": "app.js",
   "author": {
@@ -18,5 +18,13 @@
     "shark-logger-remote": "0.0.2",
     "youtube-meta-data": "^0.0.5",
     "ytdl-core": "^4.4.4"
+  },
+  "license": "MIT",
+  "maintainers": [
+    "Sharkbyteprojects"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot.git"
   }
 }
