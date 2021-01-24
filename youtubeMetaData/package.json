@@ -1,6 +1,6 @@
 {
   "name": "youtube-meta-data",
-  "version": "0.0.5",
+  "version": "0.1.5",
   "description": "get youtubeMetaData",
   "main": "ytm.js",
   "author": {
@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.5",
-    "shark-netlib": "^0.1.2"
-  }
+    "shark-netlib": "^1.2.3"
+  },
+  "license": "MIT"
 }

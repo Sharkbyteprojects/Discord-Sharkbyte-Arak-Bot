@@ -16,7 +16,7 @@
     "discord.js": "^12.5.1",
     "ffmpeg-static": "^4.2.7",
     "shark-logger-remote": "0.0.2",
-    "youtube-meta-data": "^0.0.5",
+    "youtube-meta-data": "^0.1.5",
     "ytdl-core": "^4.4.4"
   },
   "license": "MIT",
@@ -28,6 +28,13 @@
     "url": "https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot.git"
   },
   "keywords": [
-    "discord", "bot", "discordjs", "commandlineapplication", "youtube", "extrafeatures", "youtubedownload", "sharkbyte"
+    "discord",
+    "bot",
+    "discordjs",
+    "commandlineapplication",
+    "youtube",
+    "extrafeatures",
+    "youtubedownload",
+    "sharkbyte"
   ]
 }

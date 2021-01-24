@@ -17,7 +17,7 @@ function main(link, flr) {
                 }
                 response.on("data", chunk => body += chunk);
                 response.on("end", () => {
-                    ok({ body, redirectedto: link });
+                    ok({ body, redirectedto: link, header: response.headers });
                 });
                 response.on("error", erro);
             }).end();
