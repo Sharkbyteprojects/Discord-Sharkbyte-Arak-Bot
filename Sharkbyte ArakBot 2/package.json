@@ -1,6 +1,6 @@
 {
   "name": "sharkdiscordbot",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Sharkbyte ArakBot 2",
   "main": "app.js",
   "author": {
@@ -26,5 +26,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Sharkbyteprojects/Discord-Sharkbyte-Arak-Bot.git"
-  }
+  },
+  "keywords": [
+    "discord", "bot", "discordjs", "commandlineapplication", "youtube", "extrafeatures", "youtubedownload", "sharkbyte"
+  ]
 }
