@@ -5,22 +5,13 @@
 console.log("Sharkbyte ARAK Discord Bot\n\xa9 Sharkbyteprojects");
 var userplayer = [],
     sessionsofyt2discord = [];
-const { botkey, tolog } = require("./settings/usr.json"),
+const { botkey, tolog } = process.env.DiscordBotSettings ? JSON.parse(process.env.DiscordBotSettings) : require("./settings/usr.json"),
     status = ['available', 'idle', 'dnd', 'invisible'],
     Discord = require('discord.js'),
     client = new Discord.Client(),
     fs = require("./appfiles/ftool"),
     tr = require("./appfiles/trcatch"),
-    ytdl = require('ytdl-core');/*,
-    stop = async () => {
-        try {
-            await client.user.setStatus(status[2]);
-        } catch (e) {
-            console.log("Can't set Status");
-        }
-        console.log("Exit");
-        process.exit(0);
-    };*/
+    ytdl = require('ytdl-core');
 console.log(`Logmode: ${JSON.stringify(tolog)}`);
 const { ymd } = fs,
     logger = new fs.logx(fs.path.resolve(__dirname, "log", "mainlogfile.log"), tolog ? tolog : []),//POSSIBLE IN TO LOG ["ERR", "WARN", "INFO"]; []=nolog
@@ -49,8 +40,6 @@ function nmbed(strin, g) {
 }
 
 client.on('ready', tr(() => {
-    /*process.stdin.resume();
-    process.on("SIGINT", stop);*/
     xwrite(`Logged in as ${client.user.tag}!`);
     client.user.setStatus(status[0]);
     stats();
@@ -556,4 +545,4 @@ client.on('message', async msg => {
     }
 });
 
-client.login(botkey).then(() => { console.log("ClientLogin Ok"); }, (err) => { console.log(err);});
+client.login(botkey).then(() => { console.log("ClientLogin Ok"); }, (err) => { console.log(err); });
